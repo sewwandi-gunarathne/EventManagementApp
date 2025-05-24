@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Music Concert",
+        "details": "Join us for an unforgettable night of live music and entertainment"
+    },
+    {
+        "id": 2,
+        "name": "Art Exhibition",
+        "details":"Explore contemporary art from emerging and established artists"
+
+    },
+    {
+        "id": 3,
+        "name": "Team Meetup",
+        "details":"A casual get-together to strengthen team bonding and share ideas"
+    },
+    {
+        "id": 4,
+        "name": "Festival",
+        "details":"Experience the joy of culture, food, and music at our annual festival"
+    }
+]
