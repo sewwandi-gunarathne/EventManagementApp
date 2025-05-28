@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-
+import { bookEvent } from "../actions/bookEvent"; 
 export default function BookPage() {
   const [formData, setFormData] = useState({
+    eventId:"",
     name: "",
     email: ""
   });
+
+  const [isPending, startTransition] = useTransition();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,22 +19,20 @@ export default function BookPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    startTransition(async () => {
+      const result = await bookEvent(formData);
+      if (result.success) {
+        alert("Booking submitted!");
 
-    const newBooking = {
-      id: Date.now(),
-      ...formData
-    };
-
-    existingBookings.push(newBooking);
-    localStorage.setItem("bookings", JSON.stringify(existingBookings));
-
-    alert("Booking submitted!");
-
-    
-    setFormData({
-      name: "",
-      email: ""
+        
+        setFormData({
+          eventId:"",
+          name: "",
+          email: ""
+        });
+      } else {
+        alert("Booking failed!");
+      }
     });
   };
 
@@ -39,6 +40,19 @@ export default function BookPage() {
     <div className="form-container">
       <h2>Book an Event</h2>
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>
+            Event ID:
+            <input
+              type="text"
+              name="eventId"
+              value={formData.eventId}
+              onChange={handleChange}
+              required
+            />
+          </label>
+        </div>
+
         <div className="form-group">
           <label>
             Name:
@@ -65,7 +79,9 @@ export default function BookPage() {
           </label>
         </div>
 
-        <button type="submit" className="button-link">Submit Booking</button>
+        <button type="submit" className="button-link" disabled={isPending}>
+          {isPending ? "Submitting..." : "Submit Booking"}
+        </button>
 
         <Link href="/">
           <button type="button" className="button-link">Back to Home</button>
