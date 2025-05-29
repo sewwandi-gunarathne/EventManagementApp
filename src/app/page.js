@@ -12,6 +12,7 @@ export default function Home() {
       <Link href ={"/admin"}><button className = "button button-navbar">Admin</button></Link>
       </div>
 
+
     </div>
   );
 }
