@@ -34,5 +34,14 @@
     "location": "Jaffna",
     "details": "Experience the joy of culture, food, and music at our annual festival",
     "image": "/images/festival.jpg"
+  },
+  {
+    "id": 1748478628433,
+    "name": "Parade",
+    "date": "30.05.2025",
+    "time": "8.00 A.M",
+    "location": "Galle",
+    "description": "asvavc",
+    "image": "/images/1748478628379-RUK07012.jpg"
   }
 ]

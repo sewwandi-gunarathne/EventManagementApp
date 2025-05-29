@@ -1,16 +1,29 @@
 'use client';
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { bookEvent } from "../actions/bookEvent"; 
+
 export default function BookPage() {
+  const searchParams = useSearchParams();
+  const eventIdFromQuery = searchParams.get("eventId") || "";
+
   const [formData, setFormData] = useState({
-    eventId:"",
+    eventId: "",
     name: "",
     email: ""
   });
 
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    
+    setFormData((prev) => ({
+      ...prev,
+      eventId: eventIdFromQuery,
+    }));
+  }, [eventIdFromQuery]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,15 +36,13 @@ export default function BookPage() {
       const result = await bookEvent(formData);
       if (result.success) {
         alert("Booking submitted!");
-
-        
         setFormData({
-          eventId:"",
+          eventId: "",
           name: "",
           email: ""
         });
       } else {
-        alert("Booking failed!");
+        alert(result.message || "Booking failed!");
       }
     });
   };
@@ -49,6 +60,7 @@ export default function BookPage() {
               value={formData.eventId}
               onChange={handleChange}
               required
+              readOnly={!!eventIdFromQuery} // make read-only if prefilled
             />
           </label>
         </div>

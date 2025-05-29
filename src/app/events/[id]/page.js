@@ -29,7 +29,7 @@ export default async function EventDetail({ params = {}}) {
           style={{ maxWidth: '100%', height: 'auto' }}
         />
       )}</div>
-      <Link href="/book">
+      <Link href={`/book?eventId=${event.id}`}>
         <button className="button-link">Book this Event</button>
       </Link>
       <Link href="/">

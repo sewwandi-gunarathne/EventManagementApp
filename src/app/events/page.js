@@ -7,7 +7,7 @@ function parseCustomDate(dateStr) {
 
 export default function EventsPage() {
   const today = new Date();
-
+  
   const upcomingEvents = events.filter(event => parseCustomDate(event.date) >= today);
   const pastEvents = events.filter(event => parseCustomDate(event.date) < today);
 

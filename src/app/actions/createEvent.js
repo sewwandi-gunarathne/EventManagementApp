@@ -17,5 +17,5 @@ export async function createEvent (data) {
 
     return {success:true};
 
-
+    
 }

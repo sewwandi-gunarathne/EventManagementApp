@@ -24,6 +24,10 @@ h2{
   color:#84CC16 ;
 }
 
+h3 {
+  color: rgb(95, 101, 64);
+}
+
 .nav-links a {
     margin-right: 16px;
   }

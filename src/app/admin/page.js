@@ -1,16 +1,16 @@
 import bookings from '../data/bookings.json';
 import Link from "next/link";
+
 export default function AdminPage() {
   return (
     <div>
       <h2>Admin Panel</h2>
-      <p>All the booking will be listed here</p>
+      <p>All the bookings will be listed here</p>
       <div className="cards">
         {bookings.map(booking => (
           <div key={booking.id} className="card">
-            <a href={`/bookings/${booking.id}`}>Event ID : {booking.eventId}</a>
-            <br /><br />
-            <a href={`/bookings/${booking.id}`}> Booked By : {booking.name}</a>
+            <h3>Event ID: {booking.eventId}</h3>
+            <h3>Booked By: {booking.name}</h3>
           </div>
         ))}
       </div>
