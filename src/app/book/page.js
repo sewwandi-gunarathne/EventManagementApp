@@ -1,50 +1,35 @@
-'use client';
+"use client";
 
-import { useState, useTransition, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useTransition } from "react"; 
+import { useMutation } from "@tanstack/react-query";
+import axios from 'axios';
 import Link from "next/link";
-import { bookEvent } from "../actions/bookEvent"; 
+
 
 export default function BookPage() {
-  const searchParams = useSearchParams();
-  const eventIdFromQuery = searchParams.get("eventId") || "";
-
   const [formData, setFormData] = useState({
     eventId: "",
     name: "",
     email: ""
   });
-
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    
-    setFormData((prev) => ({
-      ...prev,
-      eventId: eventIdFromQuery,
-    }));
-  }, [eventIdFromQuery]);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const [isPending, startTransition] = useTransition();
+  const mutation = useMutation({
+    mutationFn: async (formData) => {
+      const response = await axios.post('/api/bookEvent', formData);
+      return response.data;
+    },
+    onSuccess: () => {
+      alert('Booking Success')
+    },
+    onError: (error) => {
+      alert(error.response?.data?.message || 'Booking Failed');
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    startTransition(async () => {
-      const result = await bookEvent(formData);
-      if (result.success) {
-        alert("Booking submitted!");
-        setFormData({
-          eventId: "",
-          name: "",
-          email: ""
-        });
-      } else {
-        alert(result.message || "Booking failed!");
-      }
-    });
+    mutation.mutate(formData);
   };
 
   return (
@@ -58,9 +43,9 @@ export default function BookPage() {
               type="text"
               name="eventId"
               value={formData.eventId}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, eventId: e.target.value })}
               required
-              readOnly={!!eventIdFromQuery} // make read-only if prefilled
+              //readOnly={!!eventIdFromQuery}  make read-only if prefilled
             />
           </label>
         </div>
@@ -72,7 +57,7 @@ export default function BookPage() {
               type="text"
               name="name"
               value={formData.name}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </label>
@@ -85,14 +70,14 @@ export default function BookPage() {
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </label>
         </div>
 
         <button type="submit" className="button-link" disabled={isPending}>
-          {isPending ? "Submitting..." : "Submit Booking"}
+          {mutation.isPending ? "Submitting..." : "Submit Booking"}
         </button>
 
         <Link href="/">

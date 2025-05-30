@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
 import { useState, useRef, useTransition } from "react";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
 import { uploadImage } from './upload';
-import { createEvent } from "../../actions/createEvent";
+import axios from 'axios';
 
 function formatTime(time24) {
   const [hourStr, minute] = time24.split(":");
@@ -35,6 +36,19 @@ export default function CreateEventPage() {
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef();
+
+  const mutation = useMutation({
+      mutationFn: async (finalEvent) => {
+        const response = await axios.post('/api/createEvent', finalEvent);
+        return response.data;
+      },
+      onSuccess: () => {
+        alert('Event Created')
+      },
+      onError: (error) => {
+        alert(error.response?.data?.message || 'Failed to Create Event');
+      },
+    });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -89,15 +103,8 @@ export default function CreateEventPage() {
         image: imageResult.fileName 
       };
 
-      const eventResult = await createEvent(finalEvent);
-
-      if (eventResult.success) {
-        alert("Event Created!");
-        setUploadedImage(imageResult.fileName);
-        resetForm();
-      } else {
-        setError("Event creation failed!");
-      }
+      mutation.mutate(finalEvent);
+      setUploadedImage(imageResult.fileName);
     });
   };
 
@@ -150,7 +157,7 @@ export default function CreateEventPage() {
         </div>
 
         <button type="submit" className="button-link" disabled={isPending}>
-          {isPending ? "Creating..." : "Create Event"}
+          {isPending || mutation.isPending? "Creating..." : "Create Event"}
         </button>
       </form>
 
