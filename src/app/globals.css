@@ -24,6 +24,10 @@ h2{
   color:#84CC16 ;
 }
 
+h3 {
+  color: rgb(95, 101, 64);
+}
+
 .nav-links a {
     margin-right: 16px;
   }
@@ -136,4 +140,15 @@ h2{
   border-radius: 4px;
   font-weight: bold;
   text-align: center;
+}
+
+.button-delete {
+  background-color: white;
+  padding: 8px 16px;
+  color: black;
+  border: 2px solid red;
+}
+
+.button-delete:hover {
+  background-color:red;
 }
