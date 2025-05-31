@@ -5,7 +5,8 @@ export default function handler (req, res){
     if (req.method =='POST') {
         const data = req.body;
         const eventsPath = path.join (process.cwd (), 'src/app/data/events.json');
-        const events = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        const events = JSON.parse(fs.readFileSync(eventsPath, 'utf-8'));
+
 
 
         const newEvent = {

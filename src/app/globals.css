@@ -141,3 +141,14 @@ h3 {
   font-weight: bold;
   text-align: center;
 }
+
+.button-delete {
+  background-color: white;
+  padding: 8px 16px;
+  color: black;
+  border: 2px solid red;
+}
+
+.button-delete:hover {
+  background-color:red;
+}

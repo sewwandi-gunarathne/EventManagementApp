@@ -74,7 +74,7 @@ export default function CreateEventPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Basic form validation
+    
     if (!formData.name || !formData.date || !formData.time || !formData.location || !formData.description || !imageFile) {
       setError("Please fill all fields and select an image.");
       return;
@@ -161,13 +161,7 @@ export default function CreateEventPage() {
         </button>
       </form>
 
-      {uploadedImage && (
-        <div className="preview-section">
-          <h4>Uploaded Image Preview:</h4>
-          <img src={`/images/${uploadedImage}`} alt="Uploaded Event" width="300" />
-
-        </div>
-      )}
+      
 
       <Link href="/admin">
         <button type="button">Back to Admin</button>

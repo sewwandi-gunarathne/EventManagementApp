@@ -1,7 +1,11 @@
+
 import bookings from '../data/bookings.json';
 import Link from "next/link";
 
+
+
 export default function AdminPage() {
+  
   return (
     <div>
       <h2>Admin Panel</h2>
@@ -11,6 +15,7 @@ export default function AdminPage() {
           <div key={booking.id} className="card">
             <h3>Event ID: {booking.eventId}</h3>
             <h3>Booked By: {booking.name}</h3>
+            
           </div>
         ))}
       </div>
