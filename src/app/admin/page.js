@@ -1,13 +1,10 @@
 
 import bookings from '../data/bookings.json';
 import Link from "next/link";
-
-
-
 export default function AdminPage() {
   
   return (
-    <div>
+    <div className="container">
       <h2>Admin Panel</h2>
       <p>All the bookings will be listed here</p>
       <div className="cards">
@@ -21,7 +18,7 @@ export default function AdminPage() {
       </div>
       <div>
         <Link href="/admin/create-event">
-          <button>Add New Event</button>
+          <button className="button-link">Add New Event</button>
         </Link>
         <br />
         <Link href="/">

@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <h1>Event Booking Application</h1>
+        <center><h1>Event Booking Application</h1></center>
         <Providers>{children}</Providers>
       </body>
     </html>

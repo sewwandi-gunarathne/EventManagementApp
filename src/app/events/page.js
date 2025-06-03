@@ -1,7 +1,10 @@
 "use client";
+import { useState } from 'react';
 import events from '../data/events.json';
 import { deleteEvent } from '../lib/deleteEvent';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import 'reactjs-popup/dist/index.css';
+import Popup from 'reactjs-popup';
 
 function parseCustomDate(dateStr) {
   const [day, month, year] = dateStr.split('.');
@@ -9,19 +12,24 @@ function parseCustomDate(dateStr) {
 }
 
 export default function EventsPage() {
-
+  const [popupMessage, setPopupMessage]= useState("");
+  const [showPopup, setShowPopup] = useState("");
   const queryClient = useQueryClient();
-
+ 
   const mutation = useMutation({
     mutationFn: deleteEvent,
     onSuccess: () => {
-      alert('Event Deleted Successfully');
+      setPopupMessage("Event Deleted Successfully");
+      setShowPopup(true);
+      //alert('Event Deleted Successfully');
       queryClient.invalidateQueries({ queryKey: ['events'] });
     },
 
     onError: (error) => {
       console.error("Deletion failed", error);
-      alert(error.response?.data?.message || error.message || 'Failed to Delete Event');
+      setPopupMessage(error.response?.data?.message || 'Failed to Delete Event');
+      setShowPopup(true);
+      //alert(error.response?.data?.message || error.message || 'Failed to Delete Event');
     },
 
   })
@@ -82,6 +90,20 @@ export default function EventsPage() {
           )}
         </div>
       </div>
+
+      <Popup open={showPopup} closeOnDocumentClick onClose={()=>setShowPopup(false)}>
+
+        <div className="model">
+          <a className="close" onClick={()=> setShowPopup(false)}>&times;</a>
+          <div className="content">{popupMessage}</div>
+          <div className="actions">
+            <button className="button button-ok" onClick={()=>setShowPopup(false)}>
+              OK
+            </button>
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 }
+

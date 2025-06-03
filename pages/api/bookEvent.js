@@ -15,7 +15,7 @@ export default function handler(req, res) {
         }
 
 
-        const existingBookings = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        const existingBookings = JSON.parse(fs.readFileSync(bookingsPath, 'utf-8'));
 
         const newBooking = {
             id: Date.now(),

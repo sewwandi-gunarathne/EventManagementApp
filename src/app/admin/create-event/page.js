@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { uploadImage } from './upload';
 import axios from 'axios';
+import Popup from "reactjs-popup";
+import 'reactjs-popup/dist/index.css';
 
 function formatTime(time24) {
   const [hourStr, minute] = time24.split(":");
@@ -34,6 +36,8 @@ export default function CreateEventPage() {
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [error, setError] = useState("");
+  const [popupMessage, setPopupMessage]= useState("");
+  const [showPopup, setShowPopup] = useState("");
   const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef();
 
@@ -43,10 +47,15 @@ export default function CreateEventPage() {
         return response.data;
       },
       onSuccess: () => {
-        alert('Event Created')
+        setPopupMessage("Event Created");
+        setShowPopup(true);
+        resetForm();
+        //alert('Event Created')
       },
       onError: (error) => {
-        alert(error.response?.data?.message || 'Failed to Create Event');
+        setPopupMessage(error.response?.data?.message || 'Failed to Create Event');
+        setShowPopup(true);
+        //alert(error.response?.data?.message || 'Failed to Create Event');
       },
     });
 
@@ -92,7 +101,8 @@ export default function CreateEventPage() {
       const imageResult = await uploadImage(form);
 
       if (!imageResult.success) {
-        setError("Image upload failed!");
+        setPopupMessage("Image upload failed!");
+        setShowPopup(true);
         return;
       }
 
@@ -164,8 +174,23 @@ export default function CreateEventPage() {
       
 
       <Link href="/admin">
-        <button type="button">Back to Admin</button>
+        <button className="button-link">Back to Admin</button>
       </Link>
+
+      <Popup open={showPopup} closeOnDocumentClick onClose={() => setShowPopup(false)}>
+        <div className="modal">
+          <a className="close" onClick={() => setShowPopup(false)}>&times;</a>
+          
+          <div className="content">{popupMessage}</div>
+          <div className="actions">
+            <button className="button button-ok" 
+            onClick={() => setShowPopup(false)}>
+              OK
+            </button>
+          </div>
+        </div>
+      </Popup>
+
     </div>
   );
 }
