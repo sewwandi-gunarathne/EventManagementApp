@@ -2,33 +2,44 @@
 import { useState } from 'react';
 import events from '../data/events.json';
 import { deleteEvent } from '../lib/deleteEvent';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import 'reactjs-popup/dist/index.css';
+import Link from 'next/link';
 import Popup from 'reactjs-popup';
 
 function parseCustomDate(dateStr) {
-  const [day, month, year] = dateStr.split('.');
+  const [day, month, year] = dateStr.split(".");
   return new Date(`${year}-${month}-${day}`);
 }
 
 export default function EventsPage() {
   const [popupMessage, setPopupMessage]= useState("");
   const [showPopup, setShowPopup] = useState("");
-  const queryClient = useQueryClient();
+  const [deletingEventId, setDeletingEventId] = useState(null);
+  const [allEvents, setAllEvents] = useState(events);
+  //const queryClient = useQueryClient();
  
   const mutation = useMutation({
     mutationFn: deleteEvent,
-    onSuccess: () => {
+
+    onMutate:(events)=> {
+      setDeletingEventId(events.id);
+    },
+
+    onSuccess: (_data, variables) => {
       setPopupMessage("Event Deleted Successfully");
       setShowPopup(true);
+      setDeletingEventId(null);
+      setAllEvents (prev => prev.filter(e => e.id !== variables.id));
       //alert('Event Deleted Successfully');
-      queryClient.invalidateQueries({ queryKey: ['events'] });
+      //queryClient.invalidateQueries({ queryKey: ['events'] });
     },
 
     onError: (error) => {
       console.error("Deletion failed", error);
       setPopupMessage(error.response?.data?.message || 'Failed to Delete Event');
       setShowPopup(true);
+      setDeletingEventId(null);
       //alert(error.response?.data?.message || error.message || 'Failed to Delete Event');
     },
 
@@ -36,8 +47,8 @@ export default function EventsPage() {
 
   const today = new Date();
 
-  const upcomingEvents = events.filter(event => parseCustomDate(event.date) >= today);
-  const pastEvents = events.filter(event => parseCustomDate(event.date) < today);
+  const upcomingEvents = allEvents.filter(event => parseCustomDate(event.date) >= today);
+  const pastEvents = allEvents.filter(event => parseCustomDate(event.date) < today);
 
   return (
     <div className="container">
@@ -57,7 +68,7 @@ export default function EventsPage() {
                   disabled={mutation.isLoading}
                   className="button button-delete"
                 >
-                  {mutation.isLoading ? 'Deleting...' : 'Delete Event'}
+                  {deletingEventId === event.id ? 'Deleting...' : 'Delete Event'}
                 </button>
               </div>
             ))
@@ -81,7 +92,7 @@ export default function EventsPage() {
                   disabled={mutation.isLoading}
                   className="button button-delete"
                 >
-                  {mutation.isLoading ? 'Deleting...' : 'Delete Event'}
+                  {deletingEventId === event.id ? 'Deleting...' : 'Delete Event'}
                 </button>
               </div>
             ))
@@ -103,6 +114,12 @@ export default function EventsPage() {
           </div>
         </div>
       </Popup>
+      <div>
+        <Link href="/">
+          <button className="button-link">Back to Home</button>
+        </Link>
+      </div>
+
     </div>
   );
 }

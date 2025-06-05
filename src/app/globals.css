@@ -168,9 +168,13 @@ button {
   width: auto;  
 }
 
+.button-navbar:hover {
+  background-color: #9e2c56;
+}
+
 .button-delete {
   background-color: white;
-  padding: 8px 15px;
+  padding: 8px 10px;
   color: black;
   border: 2px solid red;
 }

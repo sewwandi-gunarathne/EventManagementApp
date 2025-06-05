@@ -33,6 +33,7 @@ export default function CreateEventPage() {
     description: ""
   });
 
+ 
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [error, setError] = useState("");

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from 'axios';
 import Link from "next/link";

@@ -30,7 +30,7 @@ export default async function EventDetail({ params = {}}) {
         />
       )}</div>
       <Link href={`/book?eventId=${event.id}`}>
-        <button className="button-link">Book this Event</button>
+        <button className="button-link" style={{marginRight:'10px' }}>Book this Event</button>
       </Link>
       <Link href="/">
         <button className="button-link">Back to Home</button>
