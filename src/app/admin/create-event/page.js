@@ -1,4 +1,3 @@
-// src/app/admin/create-event/page.js
 
 import CreateEventContainer from './CreateEventContainer';
 

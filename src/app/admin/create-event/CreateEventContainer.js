@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useTransition } from "react";
@@ -6,6 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 import { uploadImage } from './upload';
 import axios from 'axios';
 import CreateEventForm from './CreateEventForm';
+
+import { IdleState, UploadingImageState, ErrorState, SubmittingFormState } from "./states";
 
 function formatTime(time24) {
   const [hourStr, minute] = time24.split(":");
@@ -36,7 +37,7 @@ export default function CreateEventContainer() {
   const [error, setError] = useState("");
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  //const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef();
 
   const mutation = useMutation({
@@ -55,13 +56,13 @@ export default function CreateEventContainer() {
     },
   });
 
-  const handleChange = (e) => {
+  /*const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
-  };
+  };*/
 
   const resetForm = () => {
     setFormData({
@@ -72,9 +73,47 @@ export default function CreateEventContainer() {
       description: ""
     });
     setImageFile(null);
-    fileInputRef.current.value = "";
+    if(fileInputRef.current) {
+        fileInputRef.current.value = null;
+    }
+    setError("");
   };
 
+  const context = {
+    formData,
+    setFormData,
+    imageFile,
+    setImageFile,
+    error,
+    setError,
+    popupMessage,
+    setPopupMessage,
+    showPopup,
+    setShowPopup,
+    mutation,
+    formatTime,
+    formatDate,
+    resetForm,
+    uploadImage,
+    fileInputRef,
+    currentState: null,
+    transitionTo: null,
+
+  };
+
+  const [currentState, setCurrentState] = useState(()=> new IdleState(context));
+  context.currentState = currentState;
+
+  const transitionTo = (state) => {
+    setCurrentState(state);
+  };
+  context.transitionTo = transitionTo;
+
+  const handleChange = (e) => currentState.handleChange(e);
+  const handleImageChange = (e) => currentState.handleImageChange(e);
+  const handleSubmit = (e) => currentState.handleSubmit(e);
+
+/*
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -83,7 +122,6 @@ export default function CreateEventContainer() {
       return;
     }
 
-    setError("");
     const formattedTime = formatTime(formData.time);
     const formattedDate = formatDate(formData.date);
 
@@ -109,21 +147,20 @@ export default function CreateEventContainer() {
 
       mutation.mutate(finalEvent);
     });
-  };
+  }; */
 
   return (
     <CreateEventForm
       formData={formData}
-      error={error}
-      isPending={isPending}
-      mutationPending={mutation.isPending}
-      handleChange={handleChange}
-      handleImageChange={handleImageChange}
-      handleSubmit={handleSubmit}
-      fileInputRef={fileInputRef}
-      showPopup={showPopup}
-      popupMessage={popupMessage}
-      setShowPopup={setShowPopup}
+        error={error}
+        handleChange={handleChange}
+        handleImageChange={handleImageChange}
+        handleSubmit={handleSubmit}
+        fileInputRef={fileInputRef}
+        showPopup={showPopup}
+        popupMessage={popupMessage}
+        setShowPopup={setShowPopup}
+        isPending={mutation.isLoading}
     />
   );
 }
