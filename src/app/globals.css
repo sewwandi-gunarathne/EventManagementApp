@@ -172,6 +172,12 @@ button {
   background-color: #9e2c56;
 }
 
+.button-navbar:disabled {
+  background-color: #9e2c56;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .button-delete {
   background-color: white;
   padding: 8px 10px;
@@ -206,4 +212,25 @@ button {
 
 .content {
   margin-bottom: 16px;
+}
+
+.button-login {
+  padding: 15px 30px;
+  background-color: #6fc1ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.3s, transform 0.2s;
+  min-width: 150px;
+  max-width: 200px;
+  width: auto;  
+}
+
+.button-login:hover {
+  background-color: #2496ff;
 }
