@@ -20,6 +20,7 @@ export default function EventsForm({
                             <div key={event.id} className="card">
                                 <a href={`/events/${event.id}`}>{event.name}</a>
                                 <p>{event.date} at {event.time}</p>
+                                <p>Last Updated: {event.lastUpdated}</p>
                                 <button
                                     onClick={() => mutation.mutate(event)}
                                     disabled={mutation.isLoading}
