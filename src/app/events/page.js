@@ -1,16 +1,13 @@
-import events from '../data/events.json';
 
-export default function EventsPage() {
-    return (
-        <div className="container">
-        <h2>All Events</h2>
-        <div className="cards">
-          {events.map(event => (
-            <div key={event.id} className="card">
-              <a href={`/events/${event.id}`}>{event.name}</a>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+import EventsContainer from "./EventsContainer";
+
+export const revalidate = 60; 
+
+export default async function EventsPage() {
+  const res = await fetch('http://localhost:3000/api/events', {
+    next: { revalidate: 60 }, 
+  });
+
+  const events = await res.json();
+  return <EventsContainer initialEvents={events} />;
 }
