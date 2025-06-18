@@ -1,12 +1,15 @@
 import 'reactjs-popup/dist/index.css';
 import Link from 'next/link';
 import Popup from 'reactjs-popup';
+import { useSession } from 'next-auth/react';
 
 export default function EventsForm({
-    mutation, setShowPopup, popupMessage, showPopup, 
+    mutation, setShowPopup, popupMessage, showPopup,
     upcomingEvents, pastEvents, deletingEventId
 
 }) {
+    const { data: session } = useSession();
+    const isAdmin = session?.user?.role === "admin";
     return (
         <div className="container">
             <h2> All Events</h2>
@@ -21,13 +24,16 @@ export default function EventsForm({
                                 <a href={`/events/${event.id}`}>{event.name}</a>
                                 <p>{event.date} at {event.time}</p>
                                 <p>Last Updated: {event.lastUpdated}</p>
-                                <button
-                                    onClick={() => mutation.mutate(event)}
-                                    disabled={mutation.isLoading}
-                                    className="button button-delete"
-                                >
-                                    {deletingEventId === event.id ? 'Deleting...' : 'Delete Event'}
-                                </button>
+
+                                {isAdmin && (
+                                    <button
+                                        onClick={() => mutation.mutate(event)}
+                                        disabled={mutation.isLoading}
+                                        className="button button-delete"
+                                    >
+                                        {deletingEventId === event.id ? 'Deleting...' : 'Delete Event'}
+                                    </button>
+                                )}
                             </div>
                         ))
                     ) : (
@@ -45,13 +51,16 @@ export default function EventsForm({
                             <div key={event.id} className="card" style={{ backgroundColor: '#f0f0f0' }}>
                                 <a href={`/events/${event.id}`}>{event.name}</a>
                                 <p>{event.date} at {event.time}</p>
-                                <button
-                                    onClick={() => mutation.mutate(event)}
-                                    disabled={mutation.isLoading}
-                                    className="button button-delete"
-                                >
-                                    {deletingEventId === event.id ? 'Deleting...' : 'Delete Event'}
-                                </button>
+
+                                {isAdmin && (
+                                    <button
+                                        onClick={() => mutation.mutate(event)}
+                                        disabled={mutation.isLoading}
+                                        className="button button-delete"
+                                    >
+                                        {deletingEventId === event.id ? 'Deleting...' : 'Delete Event'}
+                                    </button>
+                                )}
                             </div>
                         ))
                     ) : (
