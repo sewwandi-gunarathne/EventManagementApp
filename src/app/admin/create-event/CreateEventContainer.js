@@ -5,7 +5,18 @@ import { useState, useRef, useTransition } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { uploadImage } from './upload';
 import axios from 'axios';
-import CreateEventForm from './CreateEventForm';
+//import CreateEventForm from './CreateEventForm';
+import dynamic from "next/dynamic";
+
+const CreateEventForm = dynamic(() =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(import('./CreateEventForm'));
+    }, 2000); 
+  }), {
+    loading: () => <p>Loading...</p>
+  }
+);
 
 function formatTime(time24) {
   const [hourStr, minute] = time24.split(":");

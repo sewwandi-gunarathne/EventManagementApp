@@ -4,8 +4,17 @@ import { useState, useEffect } from 'react';
 import { deleteEvent } from '../lib/deleteEvent';
 import { useMutation } from '@tanstack/react-query';
 import 'reactjs-popup/dist/index.css';
-import EventsForm from './EventsForm';
+//import EventsForm from './EventsForm';
+import dynamic from 'next/dynamic';
 
+const EventsForm = dynamic (()=> 
+new Promise ((resolve)=> {
+    setTimeout(()=> {
+        resolve(import ('./EventsForm'));
+    }, 2000);
+}), {
+    loading: <p>Loading...</p>
+})
 function parseCustomDate(dateStr) {
     const [day, month, year] = dateStr.split(".");
     return new Date(`${year}-${month}-${day}`);

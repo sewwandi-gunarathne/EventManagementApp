@@ -3,7 +3,19 @@
 import { useState, useTransition } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import BookForm from "./BookForm";
+//import BookForm from "./BookForm";
+import dynamic from "next/dynamic";
+import { resolve } from "styled-jsx/css";
+
+const BookForm = dynamic(() =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(import('./BookForm'));
+    }, 2000);
+  }), {
+  loading: () => <p>Loading...</p>
+}
+)
 
 export default function BookContainer() {
   const [formData, setFormData] = useState({
